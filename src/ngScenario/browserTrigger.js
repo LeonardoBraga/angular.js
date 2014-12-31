@@ -15,9 +15,10 @@
     if (!element) return;
 
     eventData = eventData || {};
-    var keys = eventData.keys;
+    var keys = eventData.keys || [];
     var x = eventData.x;
     var y = eventData.y;
+    var key = eventData.key || 0;
 
     var inputType = (element.type) ? element.type.toLowerCase() : null,
         nodeName = element.nodeName.toLowerCase();
@@ -45,7 +46,6 @@
       eventType = 'change';
     }
 
-    keys = keys || [];
     function pressed(key) {
       return keys.indexOf(key) !== -1;
     }
@@ -80,6 +80,15 @@
           evnt.initAnimationEvent(eventType, null, null, null, eventData.elapsedTime || 0);
         }
       }
+    }
+    else if (/key(down|up|press)/.test(eventType)) {
+      evnt = document.createEvent('KeyboardEvent');
+      evnt.initKeyboardEvent(eventType, true, true, window, key + 2, key + 3, key + 4, key + 5, key + 6, 
+        //pressed('ctrl'),
+          //pressed('alt'),
+          // pressed('shift'),
+          // pressed('meta'),
+           key, key + 1);
     }
     else {
       evnt = document.createEvent('MouseEvents');
